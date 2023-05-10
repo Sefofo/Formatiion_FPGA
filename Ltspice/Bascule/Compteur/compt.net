@@ -1,0 +1,14 @@
+* D:\FPGA\TP_Ltspice\Compteur\compt.asc
+A1 N003 0 Clk 0 Clear 0 Q3 0 DFLOP
+A2 0 0 Clk 0 Clear 0 Q2 0 DFLOP
+A3 0 0 Clk 0 Clear 0 Q1 0 DFLOP
+A4 Enable 0 Clk 0 Clear 0 Q0 0 DFLOP
+A5 0 N002 0 Q2 0 0 N003 0 AND
+A6 0 Enable 0 Q0 0 0 N001 0 AND
+A7 0 N001 0 Q1 0 0 N002 0 AND
+V1 Enable 0 1V
+V2 Clk 0 PULSE(0 1 0 3ns 3ns 1ms 2ms)
+V3 Clear 0 PULSE(0 1 0 3ns 3ns 2ms 4ms 1)
+.tran 10ms
+.backanno
+.end

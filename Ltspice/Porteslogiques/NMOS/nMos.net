@@ -1,0 +1,11 @@
+* C:\Users\Sefofo\OneDrive\Sefofo\OneDrive\Bureau\Formation_FPGA\Formatiion_FPGA\Ltpsice\Porteslogiques\Inverseuse\nMos.asc
+V1 N001 0 5V
+V2 N002 0 PULSE(0 5 0 30ns 30ns 2ms 4ms)
+M1 OUT N002 0 0 AONS32100
+R1 N001 OUT 1kR
+.model NMOS NMOS
+.model PMOS PMOS
+.lib C:\Users\Sefofo\AppData\Local\LTspice\lib\cmp\standard.mos
+.tran 10ms
+.backanno
+.end

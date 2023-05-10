@@ -1,0 +1,22 @@
+Circuit: * C:\Users\Sefofo\OneDrive\Sefofo\OneDrive\Bureau\Formation_FPGA\Formatiion_FPGA\Ltpsice\Porteslogiques\Inverseuse\Inverseuse1.asc
+
+Direct Newton iteration for .op point succeeded.
+
+Date: Wed May 10 11:24:06 2023
+Total elapsed time: 0.306 seconds.
+
+tnom = 27
+temp = 27
+method = modified trap
+totiter = 12324
+traniter = 12312
+tranpoints = 5491
+accept = 4531
+rejected = 960
+matrix size = 13
+fillins = 1
+solver = Normal
+Avg thread counts: 1.1/1.1/1.1/1.1
+Matrix Compiler1: 728 bytes object code size  0.8/0.7/[0.3]
+Matrix Compiler2: 1.02 KB object code size  0.5/0.9/[0.4]
+

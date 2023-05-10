@@ -1,0 +1,8 @@
+* D:\FPGA\TP_Ltspice\LatchFlipFlop_TD__265__0\Flipflop\flipflop.asc
+V1 S 0 PULSE(0 1 0 3ns 3ns 2ms 4ms)
+V2 CLK 0 PULSE(1 0 0 3ns 3ns 0.5ms 1ms)
+A2 S 0 CLK 0 CLR #Q Q 0 DFLOP
+V3 CLR 0 PULSE(0 1 0 3ns 3ns 2ms 4ms 1)
+.tran 10ms
+.backanno
+.end
