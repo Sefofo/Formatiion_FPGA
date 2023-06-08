@@ -5,10 +5,10 @@ use ieee.numeric_std.all;
 
 entity counter_unit is
 generic (
-         max_count : integer :=20000000;
-         nb_bit : integer := 28
-         --max_count : integer :=4;
-         --nb_bit : integer := 3
+--         max_count : integer :=200000000;
+--         nb_bit : integer := 28
+         max_count : integer :=4;
+         nb_bit : integer := 3
          );
     port ( 
 		clk			: in std_logic; 

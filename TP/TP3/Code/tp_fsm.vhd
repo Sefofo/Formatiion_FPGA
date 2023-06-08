@@ -5,10 +5,10 @@ use ieee.std_logic_arith;
 
 entity tp_fsm is
     generic (
-       max_count : integer :=20000000;
-       nb_bit : integer := 28;
-      -- max_count : integer :=4;
-       --nb_bit : integer := 3;
+--       max_count : integer :=200000000;
+--       nb_bit : integer := 28;
+       max_count : integer :=4;
+       nb_bit : integer := 3;
        nbre_cycle : positive :=6  --cycle de clignotement allumé et éteint
     );
     port ( 
@@ -36,17 +36,15 @@ architecture behavioral of tp_fsm is
     signal raz : std_logic;                 -- signal de remise à zéro
     signal end_count : std_logic;            -- signal de sortie de counter_unit
     signal end_count2 : integer range 0 to 5:=0;                -- signal de sortie de counter2
-    signal count_clig :integer range 0 to 5:=0;
-    signal val_clig : std_logic;
     signal state_led: std_logic;                     -- signal de'état de led
     
  --Declaration de l'entite a tester counter_unit
    component counter_unit 
    generic (
-         max_count : integer :=20000000;
-         nb_bit : integer := 28
-          --max_count : integer :=4;
-      -- nb_bit : integer := 3
+--         max_count : integer :=200000000;
+--         nb_bit : integer := 28
+          max_count : integer :=4;
+       nb_bit : integer := 3
          );
         port ( 
             clk           : in std_logic; 
@@ -58,12 +56,13 @@ architecture behavioral of tp_fsm is
 	
 	begin
 
+
 compteur : counter_unit
 generic map (
-         max_count =>20000000,
-         nb_bit => 28
-        --  max_count =>4,
-       --nb_bit => 3
+--         max_count =>200000000,
+--         nb_bit => 28
+          max_count =>4,
+       nb_bit => 3
          )
 port map (
             clk => clk, 
@@ -91,20 +90,15 @@ port map (
 			         end if; 
 			    else 
 			          end_count2<=0;
-			     end if;
-			if (end_count2= nbre_cycle-1 and end_count='1') then
-			   count_clig <= count_clig + 1; 
-			   elsif (val_clig='1') then 
-			     count_clig<= 0;
-			else
-			   	count_clig<=count_clig; 
-			   	end if;
+			     end if;		
+			
 		end if;
 		
 end process;
 				
 				--Partie combinatoire a completer avec votre compteur de cycles
-							
+				
+				--remise à zero à la fin du compteur de cycles				
 		raz <= '1'  when (end_count2 = ((nbre_cycle)-1) and end_count = '1')
                 else '0';
           end_counter2 <= raz;
@@ -115,7 +109,7 @@ end process;
 					
 		
 		-- FSM
-process(current_state, restart,state_led, count_clig, end_counter2) --a completer avec vos signaux
+process(current_state, restart,state_led,end_counter2) --a completer avec les signaux current_state, restart,state_led,end_counter2
 		
 begin	
              --signaux pilotes par la fsm les signaux sont affectés dans les différentes cas
