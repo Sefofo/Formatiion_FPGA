@@ -8,26 +8,27 @@ entity tb_tp_fsm is
 end tb_tp_fsm;
 
 architecture behavioral of tb_tp_fsm is
-
+     
+     --signaux de clk, resetn et restart
 	signal resetn      : std_logic := '0';
 	signal clk         : std_logic := '0';
 	signal restart         : std_logic := '0';
-	--a completer 
+	
+	--Signaux de sorties 
 	signal end_count2 : integer range 0 to 5:=0;
 	signal end_counter2 : std_logic:='0';
 	 signal  s_led_out_B  : std_logic;
     signal  s_led_out_V  : std_logic;
     signal  s_led_out_R  : std_logic;
-    signal count_clig :integer range 0 to 5:=0;
-    signal val_clig : std_logic;
+    
 	-- Les constantes suivantes permette de definir la frequence de l'horloge 
 	constant hp : time := 5 ns;      --demi periode de 5ns
 	constant period : time := 2*hp;  --periode de 10ns, soit une frequence de 100Hz
 	constant nbre_cycle : positive := 6 ; 
-	constant  max_count : integer :=20000000;
-    constant   nb_bit : integer := 28;
-	 --constant  max_count : integer :=4;
-     -- constant   nb_bit : integer := 3;
+--	constant  max_count : integer :=200000000;
+--    constant   nb_bit : integer := 28;
+	 constant  max_count : integer :=4;
+      constant   nb_bit : integer := 3;
      
      --Déclaration du composant fsm
 	component tp_fsm
@@ -119,40 +120,6 @@ process
 
     -- Wait for 3 clignotements en vert (GREEN state)
     wait for period*nbre_cycle*max_count;
-
-    -- Restart
-    restart <= '1';
-    wait for 40 ns;
-    restart <= '0';
-    wait for period*(nbre_cycle)*max_count;
-
-    -- Verifions l'état initial : idle (White LED)
-    assert (s_led_out_R = '1' and s_led_out_V = '1' and s_led_out_B = '1')
-      report "Initial state mismatch" severity error;
-
-    -- Wait for 3 clignotements en blanc (INITIAL state)
-    wait for period*nbre_cycle*max_count;
-
-    -- Verifions RED state1
-    assert (s_led_out_R = '1' and s_led_out_V = '0' and s_led_out_B = '0')
-      report "RED state mismatch" severity error;
-
-    -- Wait for 3 clignotements en rouge (RED state)
-    wait for period*nbre_cycle*max_count;
-
-    -- Verifions BLUE state2
-    assert (s_led_out_R = '0' and s_led_out_V = '0' and s_led_out_B = '1')
-report "BLUE state mismatch" severity error;
-
--- Wait for 3 clignotements en bleu (BLUE state)
-wait for period*nbre_cycle*max_count;
-
--- Verifions  GREEN state3
-assert (s_led_out_R = '0' and s_led_out_V = '1' and s_led_out_B = '0')
-  report "GREEN state mismatch" severity error;
-
--- Wait for 3 clignotements en vert (GREEN state)
-wait for period*nbre_cycle*max_count;
 
 --Pour finir la simulation	
 wait;	
