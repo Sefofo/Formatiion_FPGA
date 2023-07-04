@@ -1,3 +1,4 @@
+
 # TPs & PROJET de ma formation FPGA
 
 ## TP1 - Full Adder
@@ -7,6 +8,11 @@
 ## TP4 - Partie 2: Pilotage de LEDs et Mémoire (utilisation de FIFO)
 ## TP5 - Domaines d'horloge (utilisation de PLL)
 ## Projet: Démarrage le 2 juin 2023
+## Projet moving stripe: Démarrage le 26 juin 2023
+
+#Ltspice 
+
+#Notes & TD
 
 ## ANNEXE
 ### Matériel utilisé:
