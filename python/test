@@ -1,0 +1,133 @@
+
+`timescale 1 ns / 10 ps
+
+module wrp #(
+    parameter START          = 32'h0000_0000,
+    parameter END_            = 32'h0000_0000
+
+) (
+    // Horloge et reset
+    input  logic  clk,
+    input  logic  reset,
+
+    // Signaux de synchro
+	input logic              syn,
+
+    
+    // interfaces x_m 
+    itf_x_m.sl             x_m,
+    input logic [31:0]       cpt
+    
+
+
+);
+
+
+//----------------------------------------------------------------------------------
+
+// SIGNAUX INTERNES
+
+//----------------------------------------------------------------------------------
+
+logic [31:0]    datat;
+
+//----------------------------------------------------------------------------------
+
+// LECTURE des aleas via le crossbar
+
+//----------------------------------------------------------------------------------
+
+assign x_m.xt_ack = x_m.xt_vld;
+
+always @(posedge reset or posedge clk)
+
+begin
+	if  (reset)
+	begin
+		x_m.xs_vld  <= 1'b0;
+		x_m.xs_addr <= 5'h00;
+		x_m.xs_data <= 32'h0000_0000;
+	end
+
+	else
+
+	begin
+		x_m.xs_vld  <= 1'b0;
+		x_m.xs_addr <= 5'h00;
+		x_m.xs_data <= 32'h0000_0000;
+		if (x_m.xt_vld & x_m_rng.xt_rd_nwr & xt_rand.vld)  //
+
+		begin
+			x_m.xs_vld  <= 1'b1;
+			x_m.xs_addr <= x_m.xt_addr;
+			
+			case (x_m.xt_addr[4:0])
+			
+				5'd0    : x_m.xs_data 	   <= P_START_TAG;
+				5'd1    : x_m.xs_data 	   <= datation;
+				5'd2    : x_m.xs_data        <= xt_rand.payload;
+				5'd3    : x_m.xs_data 	   <= xt_rand.payload;
+				5'd4    : x_m.xs_data        <= xt_rand.payload;
+				5'd5    : x_m.xs_data        <= xt_rand.payload;
+				5'd6    : x_m.xs_data        <= xt_rand.payload;
+				5'd7    : x_m.xs_data        <= xt_rand.payload;
+				5'd8    : x_m.xs_data 	   <= P_END_TAG;
+				default : x_m.xs_data 	   <= 32'h0000_0000;
+			endcase
+		end
+	end
+end
+
+
+
+always @(posedge reset or posedge clk)
+begin
+	if (reset) begin
+		datat <= 32'b0;
+	end
+	else begin
+		if(syn)
+			datat <= cpt;
+	end
+end
+
+//----------------------------------------------------------------------------------
+
+    // Interfaces
+
+//----------------------------------------------------------------------------------
+
+    // interface xt_rand
+    itf_xt_gen#(
+        .PAYLOAD_MASTER (logic [WIDTH-1:0]),
+        .PAYLOAD_SLAVE  (logic)
+    ) xt_rand (
+        .clk            (clk),
+        .reset          (~reset_n)
+    );
+
+	
+//----------------------------------------------------------------------------------
+
+    // Instanciation acc_rng_osc
+
+//----------------------------------------------------------------------------------
+
+    acc_rng_osc #(
+        .USE_RAM                 (0),
+        .DEPTH                   (1),
+        .WIDTH                   ('d32)
+    )
+    acc_rng_osc_0 (
+        .clk                     (clk),
+        .reset_n                 (reset_n),
+        .power_on                (power_on),
+        .enable                  (enable),
+        .enable_gen              (enable_gen),
+        .kd_value                (kd_value),
+        .xt_rand                 (xt_rand)
+    ); 
+
+
+
+endmodule : wrp
