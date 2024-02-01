@@ -443,3 +443,164 @@ paintext
                                                         | Etat final    |
                                                         |               |
                                                         +---------------+
+-----------------------------------------------------------------------
+testben
+Pour créer un testbench pour votre module VHDL, vous pouvez suivre les étapes suivantes. Assurez-vous d'ajuster les paramètres en fonction de votre conception et de spécifier les valeurs d'entrée nécessaires pour tester différents scénarios.
+
+```verilog
+`timescale 1 ns / 10 ps
+
+module testbench;
+
+    // Déclaration des signaux du testbench
+    reg clk;
+    reg reset;
+    reg syn;
+    reg [31:0] cpt;
+
+    // Déclaration des signaux d'interface x_m
+    reg [31:0] x_m_xt_addr;
+    reg x_m_xt_vld;
+    reg [31:0] x_m_xt_data;
+    wire x_m_xs_vld;
+    wire [4:0] x_m_xs_addr;
+    wire [31:0] x_m_xs_data;
+
+    // Instanciation du module
+    wrp #(
+        .START(32'h0000_0000),
+        .END_(32'h0000_0000)
+    ) dut (
+        .clk(clk),
+        .reset(reset),
+        .syn(syn),
+        .x_m({x_m_xt_vld, x_m_xt_addr, x_m_xt_data, x_m_xs_vld, x_m_xs_addr, x_m_xs_data}),
+        .cpt(cpt)
+    );
+
+    // Génération de l'horloge
+    initial begin
+        clk = 0;
+        forever #5 clk = ~clk;
+    end
+
+    // Initialisation des signaux
+    initial begin
+        reset = 1;
+        syn = 0;
+        cpt = 0;
+        // Initialisez d'autres signaux d'entrée si nécessaire
+
+        // Simulation du comportement de votre module
+        // Ajoutez ici des instructions pour modifier les signaux d'entrée au fil du temps
+        #10 reset = 0;
+        #10 syn = 1;
+        #1000 $finish;
+    end
+
+    // Génération des impulsions x_m_xt_vld et x_m_xt_data
+    always #5 x_m_xt_vld = ~x_m_xt_vld;
+
+    // Simulation des transactions x_m_xt_data
+    always @(posedge clk) begin
+        if (x_m_xt_vld) begin
+            case (x_m_xt_addr)
+                5'd0 : x_m_xt_data = 32'h01234567; // Exemple de données pour l'adresse 0
+                5'd1 : x_m_xt_data = 32'h89ABCDEF; // Exemple de données pour l'adresse 1
+                // Ajoutez d'autres cas pour les différentes adresses
+                default : x_m_xt_data = 32'h00000000;
+            endcase
+        end
+    end
+
+    // Affichage des résultats
+    initial begin
+        $monitor("Time=%0t clk=%b reset=%b syn=%b x_m_xt_vld=%b x_m_xt_addr=%h x_m_xt_data=%h x_m_xs_vld=%b x_m_xs_addr=%h x_m_xs_data=%h",
+            $time, clk, reset, syn, x_m_xt_vld, x_m_xt_addr, x_m_xt_data, x_m_xs_vld, x_m_xs_addr, x_m_xs_data);
+    end
+
+endmodule : testbench
+```
+
+Ce testbench initialise les signaux, génère une horloge, simule le comportement de votre module en modifiant les signaux d'entrée au fil du temps, et affiche les résultats de la simulation. N'oubliez pas de personnaliser les données d'adresse et de tester différentes conditions pour vous assurer que votre module fonctionne correctement.
+
+
+-------------------------------------------
+Je m'excuse pour la confusion. Voici un exemple de testbench écrit en Verilog pour le module que vous avez fourni :
+
+```verilog
+`timescale 1 ns / 10 ps
+
+module tb_wrp;
+
+    // Déclaration des signaux du testbench
+    reg clk;
+    reg reset;
+    reg syn;
+    reg [31:0] cpt;
+
+    // Déclaration des signaux d'interface x_m
+    reg [31:0] x_m_xt_addr;
+    reg x_m_xt_vld;
+    reg [31:0] x_m_xt_data;
+    wire x_m_xs_vld;
+    wire [4:0] x_m_xs_addr;
+    wire [31:0] x_m_xs_data;
+
+    // Instanciation du module
+    wrp #(
+        .START(32'h0000_0000),
+        .END_(32'h0000_0000)
+    ) dut (
+        .clk(clk),
+        .reset(reset),
+        .syn(syn),
+        .x_m({x_m_xt_vld, x_m_xt_addr, x_m_xt_data, x_m_xs_vld, x_m_xs_addr, x_m_xs_data}),
+        .cpt(cpt)
+    );
+
+    // Génération de l'horloge
+    initial begin
+        clk = 0;
+        forever #5 clk = ~clk;
+    end
+
+    // Initialisation des signaux
+    initial begin
+        reset = 1;
+        syn = 0;
+        cpt = 0;
+        // Initialisez d'autres signaux d'entrée si nécessaire
+
+        // Simulation du comportement de votre module
+        // Ajoutez ici des instructions pour modifier les signaux d'entrée au fil du temps
+        #10 reset = 0;
+        #10 syn = 1;
+        #1000 $finish;
+    end
+
+    // Génération des impulsions x_m_xt_vld et x_m_xt_data
+    always #5 x_m_xt_vld = ~x_m_xt_vld;
+
+    // Simulation des transactions x_m_xt_data
+    always @(posedge clk) begin
+        if (x_m_xt_vld) begin
+            case (x_m_xt_addr)
+                5'd0 : x_m_xt_data = 32'h01234567; // Exemple de données pour l'adresse 0
+                5'd1 : x_m_xt_data = 32'h89ABCDEF; // Exemple de données pour l'adresse 1
+                // Ajoutez d'autres cas pour les différentes adresses
+                default : x_m_xt_data = 32'h00000000;
+            endcase
+        end
+    end
+
+    // Affichage des résultats
+    initial begin
+        $monitor("Time=%0t clk=%b reset=%b syn=%b x_m_xt_vld=%b x_m_xt_addr=%h x_m_xt_data=%h x_m_xs_vld=%b x_m_xs_addr=%h x_m_xs_data=%h",
+            $time, clk, reset, syn, x_m_xt_vld, x_m_xt_addr, x_m_xt_data, x_m_xs_vld, x_m_xs_addr, x_m_xs_data);
+    end
+
+endmodule : tb_wrp
+```
+
+Ce testbench initialise les signaux, génère une horloge, simule le comportement de votre module en modifiant les signaux d'entrée au fil du temps, et affiche les résultats de la simulation. N'oubliez pas de personnaliser les données d'adresse et de tester différentes conditions pour vous assurer que votre module fonctionne correctement.
